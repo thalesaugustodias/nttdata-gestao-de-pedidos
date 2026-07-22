@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "10000:10000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Data Source=/var/lib/render/app-data/orders.db
+      - JwtSettings__Secret=OrderManagementSuperSecretKey2024!@#$%
+      - JwtSettings__Issuer=OrderManagement.Api
+      - JwtSettings__Audience=OrderManagement.Client
+      - JwtSettings__ExpirationMinutes=60
+    volumes:
+      - sqlite_data:/var/lib/render/app-data
+    restart: unless-stopped
+
+volumes:
+  sqlite_data:
