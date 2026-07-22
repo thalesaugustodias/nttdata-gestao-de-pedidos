@@ -2,6 +2,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OrderManagement.Api.Requests;
 using OrderManagement.Application.CQRS.Commands.Orders;
 using OrderManagement.Application.CQRS.Queries.Orders;
 
@@ -65,5 +66,3 @@ public class OrdersController(IMediator mediator) : ControllerBase
         }
     }
 }
-
-public record CreateOrderRequest(IEnumerable<OrderItemInput> Items);
