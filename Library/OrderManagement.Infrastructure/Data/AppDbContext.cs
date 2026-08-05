@@ -16,6 +16,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             entity.Property(o => o.CustomerId).IsRequired();
             entity.Property(o => o.Status).IsRequired();
             entity.Property(o => o.CreatedAt).IsRequired();
+            entity.Property(o => o.Notes).HasMaxLength(500);
 
             entity.HasMany(o => o.Items)
                   .WithOne()

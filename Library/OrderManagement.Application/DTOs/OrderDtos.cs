@@ -16,6 +16,7 @@ public record OrderDto(
     OrderStatus Status,
     DateTime CreatedAt,
     decimal TotalAmount,
+    string? Notes,
     IReadOnlyCollection<OrderItemDto> Items
 );
 

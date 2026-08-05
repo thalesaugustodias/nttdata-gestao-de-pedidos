@@ -3,6 +3,7 @@ using Moq;
 using OrderManagement.Application.CQRS.Queries.Orders;
 using OrderManagement.Application.Interfaces;
 using OrderManagement.Domain.Entities;
+using OrderManagement.Domain.Enums;
 
 namespace OrderManagement.Tests.Handlers;
 
@@ -25,10 +26,10 @@ public class GetOrdersHandlerTests
             Order.Create(Guid.NewGuid(), [("Product B", 2, 20.00m)])
         };
 
-        _repositoryMock.Setup(r => r.GetPagedAsync(1, 10, It.IsAny<CancellationToken>()))
+        _repositoryMock.Setup(r => r.GetPagedAsync(1, 10, OrderStatus.Pending, It.IsAny<CancellationToken>()))
             .ReturnsAsync((orders, 2));
 
-        var result = await _handler.Handle(new GetOrdersQuery(1, 10), CancellationToken.None);
+        var result = await _handler.Handle(new GetOrdersQuery(1, 10, OrderStatus.Pending), CancellationToken.None);
 
         result.Should().NotBeNull();
         result.TotalCount.Should().Be(2);
@@ -40,10 +41,10 @@ public class GetOrdersHandlerTests
     [Fact]
     public async Task Handle_EmptyRepository_ReturnsEmptyPagedResult()
     {
-        _repositoryMock.Setup(r => r.GetPagedAsync(1, 10, It.IsAny<CancellationToken>()))
+        _repositoryMock.Setup(r => r.GetPagedAsync(1, 10, OrderStatus.Pending, It.IsAny<CancellationToken>()))
             .ReturnsAsync((new List<Order>(), 0));
 
-        var result = await _handler.Handle(new GetOrdersQuery(1, 10), CancellationToken.None);
+        var result = await _handler.Handle(new GetOrdersQuery(1, 10, OrderStatus.Pending), CancellationToken.None);
 
         result.TotalCount.Should().Be(0);
         result.Items.Should().BeEmpty();

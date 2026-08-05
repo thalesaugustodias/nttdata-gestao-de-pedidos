@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using OrderManagement.Application.Interfaces;
 using OrderManagement.Domain.Entities;
+using OrderManagement.Domain.Enums;
 using OrderManagement.Infrastructure.Data;
 
 namespace OrderManagement.Infrastructure.Repositories;
@@ -15,9 +16,14 @@ public class OrderRepository(AppDbContext context) : IOrderRepository
             .Include(o => o.Items)
             .FirstOrDefaultAsync(o => o.Id == id, cancellationToken);
 
-    public async Task<(IEnumerable<Order> Items, int TotalCount)> GetPagedAsync(int page, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<(IEnumerable<Order> Items, int TotalCount)> GetPagedAsync(int page, int pageSize,OrderStatus status, CancellationToken cancellationToken = default)
     {
         var query = context.Orders.Include(o => o.Items).AsNoTracking();
+
+        if (status != OrderStatus.Pending)
+        {
+            query = query.Where(o => o.Status == status);
+        }
 
         var totalCount = await query.CountAsync(cancellationToken);
 

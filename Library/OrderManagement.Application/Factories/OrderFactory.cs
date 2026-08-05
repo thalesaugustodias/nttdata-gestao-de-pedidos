@@ -12,6 +12,7 @@ public static class OrderFactory
             order.Status,
             order.CreatedAt,
             order.TotalAmount,
+            order.Notes,
             order.Items.Select(ToDto).ToList().AsReadOnly()
         );
 

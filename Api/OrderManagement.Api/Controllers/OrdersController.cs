@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using OrderManagement.Api.Requests;
 using OrderManagement.Application.CQRS.Commands.Orders;
 using OrderManagement.Application.CQRS.Queries.Orders;
+using OrderManagement.Domain.Enums;
 
 namespace OrderManagement.Api.Controllers;
 
@@ -34,10 +35,10 @@ public class OrdersController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10, OrderStatus status = OrderStatus.Pending, CancellationToken cancellationToken = default)
     {
-        var result = await mediator.Send(new GetOrdersQuery(page, pageSize), cancellationToken);
-        return Ok(result);
+        var result = await mediator.Send(new GetOrdersQuery(page, pageSize, status), cancellationToken);
+        return Ok(result);  
     }
 
     [HttpGet("{id:guid}")]

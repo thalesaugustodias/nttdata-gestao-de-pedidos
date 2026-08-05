@@ -10,6 +10,7 @@ public class Order
     public Guid CustomerId { get; private set; }
     public OrderStatus Status { get; private set; }
     public DateTime CreatedAt { get; private set; }
+    public string? Notes { get; set; }
     public IReadOnlyCollection<OrderItem> Items => _items.AsReadOnly();
 
     public decimal TotalAmount => _items.Sum(i => i.TotalPrice);
